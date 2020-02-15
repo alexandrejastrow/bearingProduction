@@ -1,0 +1,132 @@
+A company that manufactures bearings has machinery for
+produce them, order requisitions.
+
+Her process is as follows:
+a request for a specific bearing arrives, which can be cylindrical,
+conical, spherical steel or titanium.
+
+each bearing has an order to be followed in the machines and a time to
+stay inside being processed, in addition to a specific priority
+for each order.
+
+Machines have priority queues
+where orders stay as they are requested.
+
+only after leaving the last machine that the order should stay,
+the order is finally ready.
+
+A cylindrical bearing has priority 1, the conico has priority
+2, and spherical priority 3. The higher the number, the more urgent the request.
+
+the average arrival of a cylindrical bearing order is 21.5,
+of a 19.1 taper and a spherical 8.0.
+when a spherical order arrives, it has a 10% chance of being a titanium order.
+
+the order of the machinery for a cylindrical bearing is LATHE, MILL, LATHE, CHUCK.
+the order of the machinery for a tapered bearing is LATHE, CHUCK, LATHE.
+the order of the machinery for a spherical steel bearing is MILLING, CHUCK, LATHE.
+the order of the machinery for a spherical bearing of titanium is FRESA, CHUCK, LATHE, FRESA, LATH
+
+
+PS: queue and list should be used in this problem, [priority queue], structs,
+in addition to TADs. Flags will not be accepted, use DEFINE or ENUM to simulate priorities.
+
+Pointer to function will be needed in virtually all structs to not have to
+know which type was passed and just need to know its functions in real time.
+
+
+
+the stay time in the mandrel is 1.2, 2.1, 1.4 and 1.5 for
+cylindrical, conical, steel and titanium, respectively.
+
+the cut-off time is 0.5, 0.5 and 0.6 for cylindrical, steel and
+titanium, respectively.
+
+the length of stay on the lathe is 0.8, 1.8, 1.0 and 1.6 for cylindrical,
+taper, steel and titanium, respectively.
+
+so summarizing everything:
+
+Estadia_Mandril_Cilindrico 1.2
+Estadia_Fresa_Cilindrico 0.5
+Cylindrical_Stay_0 0.8
+
+Estadia_Mandril_Conico 2.1
+Estadia_Torno_Conico 1.8
+
+Estadia_Mandril_Esferico_Aco 1.4
+Estadia_Fresa_Esferico_Aco 0.5
+Estadia_Torno_Esferico_Aco 1.0
+
+Estadia_Mandril_Esferico_Titanio 1.5
+Estadia_Fresa_Esferico_Titanio 0.6
+Estadia_Torno_Esferico_Titanio 1.6
+
+Cylindrical_Guarantee 21.5
+Arrival_Media_Conico 19.1
+Arrival_Media_Esferico 8.0
+
+sequencia_cilindrica eH LATHE, MILLING, LATHE, CHUCK
+sequencia_conica eH LATHE, CHUCK, LATHE
+sequencia_esferica_titanio eh FRESA, CHUCK, LATHE, FRESA, LATH
+sequencia_esferica_aco eh FRESA, CHUCK, LATHE
+
+Your goal is to make a simulator of this company that using all the
+previously defined data and taking as input argument the
+program C a double that will represent the total simulation time,
+print on the screen how many bearings were built of each type and the
+average construction time of each type. ps: make the simulator dividing
+everything in libraries [that is, several files], knife
+little by little, putting it all together will surely mess up your head and
+had made it even more difficult when debugging.
+
+the gener_exponential function below returns the time it will take to
+another request arrives, passing as an argument the average arrival of the
+request you want to know.
+
+#include <stdio.h>
+#include <stdlib.h>
+#include <math.h>
+#include <time.h>
+
+float generateExponential(float avg){
+    float u=0; /* Randomly generates a number between 0 e 1 */
+    do 
+        u = ((float)rand()) / ((float) RAND_MAX);
+    while ((u==0) || (u==1));
+    return (-avg * log (u));
+}
+
+to find out how long the bearing will be in the machinery, use the function below:
+
+
+float tempo(float Stay_Equipment_Rolling)
+{
+    float u = ((float)rand()) / ((float) RAND_MAX);
+    return 2.0 * Stay_Equipment_Rolling* u;
+}
+
+/* test to see only the generators working */
+
+int main(){
+    srand(time(NULL));  /* <-- mandatory to have only once in your code */
+    printf("%f \n" , generateExponential(21.5));
+    printf("%f \n" , tempo(1.6));
+    return 0;
+}
+
+the entry will be just the number of clicks that your code will run;
+ex:
+./simulador 200
+will run for 200 seconds
+the output should follow the following pattern:
+
+$ ./oi.exe 1000000
+Cilindros : 29.69       46768        
+Conicos   : 19.220    52096       
+Aco       :   5.409       124385
+Titanio   : 10.499      125468
+
+The print command must then follow the following format:
+
+printf("<bearing type>   : %7.2f \t %d \n",vartime, varamount);
